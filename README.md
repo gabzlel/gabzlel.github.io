@@ -1,1 +1,0 @@
-# gabzlel.github.io
