@@ -1,0 +1,71 @@
+import discord
+import asyncio
+import random
+
+client = discord.Client()
+
+@client.event
+async def on_ready():
+  print('Logged in as')
+  print(client.user.name)
+  print('------')
+
+  @client.event
+  async def on_server_join(server):
+    for channel in server.channels:
+        print(channel.name)
+        if channel.name == 'general':
+            await client.send_message(channel, "Thank you for adding this bot, have fun playing rock, paper and scissor. Feel free to add my discord Gabz#9816")
+
+
+
+  @client.event
+  async def on_message(message):
+    if message.content.startswith('!test'):
+      counter = 0
+      tmp = await client.send_message(message.channel, 'Calculating messages...')
+      async for log in client.logs_from(message.channel, limit=100):
+        if log.author == message.author:
+          counter += 1
+
+      await client.edit_message(tmp, 'You have {} messages.'.format(counter))
+    elif message.content.startswith('!sleep'):
+      await asyncio.sleep(5)
+      await client.send_message(message.channel, 'Done sleeping')
+    elif message.content.startswith('!game'):
+      arg = message.content.split(' ')
+      choice = 0
+      if arg[1] == 'rock':
+         choice = 0
+      elif arg[1] == 'scissor':
+         choice = 1
+      elif arg[1] == 'paper':
+        choice = 2
+      else:
+        await client.send_message(message.channel, "Invalid choice")
+        return
+      computer = random.randint(0,2)
+      if choice == computer:
+        await client.send_message(message.channel, 'Tied!')
+      elif choice == 1 and computer == 2:
+        await client.send_message(message.channel, "You win!")
+      elif choice == 1 and computer == 0:
+        await client.send_message(message.channel, "Computer win!")
+      elif choice == 2 and computer == 1:
+        await client.send_message(message.channel, "Computer wins!")
+      elif choice == 2 and computer == 0:
+        await client.send_message(message.channel, "You win!")
+      elif choice == 0 and computer == 1:
+        await client.send_message(message.channel, "You win")
+      elif choice == 0 and computer == 2:
+        await client.send_message(message.channel, "Computer wins!")
+
+
+
+
+
+
+
+
+
+client.run('MzM5MDI5OTUyNDc5NjI1MjMx.DHcHdw.GmpcF8Q-vpF-DyQSV7-zuZoOaeg')
